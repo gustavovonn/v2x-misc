@@ -42,6 +42,12 @@ struct CartesianCoordinatePolicy {
     {
         return distance(pos1_a, pos2_a, pos1_b, pos2_b);
     }
+
+    // Bearing from a to b, clockwise from +Y [rad]; lat stores Y, lon stores X
+    static double bearing(double lat_a, double lon_a, double lat_b, double lon_b)
+    {
+        return std::atan2(lon_b - lon_a, lat_b - lat_a);
+    }
 };
 
 // -----------------------------------------------------------------------------
@@ -96,6 +102,19 @@ struct Wgs84CoordinatePolicy {
                                double lat2, double lon2)
     {
         return distance(lat1, lon1, lat2, lon2);
+    }
+
+    // Bearing from point 1 to point 2, clockwise from true north [rad]; same local radii as distance()
+    static double bearing(double lat1, double lon1, double lat2, double lon2)
+    {
+        const double latRad1 = lat1 * ConstantsWGS84::DEG_TO_RAD;
+        const double latRad2 = lat2 * ConstantsWGS84::DEG_TO_RAD;
+        const double latMid = (latRad1 + latRad2) * 0.5;
+
+        const double dy = ConstantsWGS84::meridionalRadius(latMid) * (latRad2 - latRad1);
+        const double dx = ConstantsWGS84::primeVerticalRadius(latMid) * (lon2 - lon1) * ConstantsWGS84::DEG_TO_RAD
+                        * std::cos(latMid);
+        return std::atan2(dx, dy);
     }
 };
 
