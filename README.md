@@ -2,8 +2,7 @@
 
 Reusable V2X motion primitives. Header-only and free of any detection policy, so it
 cross-compiles for embedded targets and can be shared by experiments that use a different
-confidence mechanism. Standard library only, except the two filtering headers, which need
-[Eigen](https://gitlab.com/libeigen/eigen) (3.4) on the include path.
+confidence mechanism. Standard library only.
 
 | Header | Contents |
 |---|---|
@@ -17,13 +16,5 @@ confidence mechanism. Standard library only, except the two filtering headers, w
 | `KinematicRegression.h` | OLS estimation of acceleration and yaw rate over a history window |
 | `MotionModels.h` | `IMotionModel`, single-step and history-aware CTRA models, `MotionModelFactory` |
 | `ConsistencyCheck.h` | Reported vs implied speed and frozen position between two reports of one source; thresholds supplied by the caller |
-| `UnscentedKalmanFilter.h` | UKF with augmented process noise and additive measurement noise; split into `predict`, `innovate` and `update` so a measurement can be gated before it is fused (Eigen) |
-| `CtraProcessModel.h` | CTRA state `[x, y, heading, v, a, w]` and its process function for the UKF, built on `integrateCtra` (Eigen) |
 
-Usage: add `libs/v2x-misc/include` to the include path (and Eigen for the filtering headers).
-There is nothing to compile or link.
-
-## References
-
-- E. A. Wan, R. van der Merwe, "The Unscented Kalman Filter for Nonlinear Estimation", IEEE AS-SPCC 2000.
-- S. J. Julier, J. K. Uhlmann, "Unscented Filtering and Nonlinear Estimation", Proc. IEEE 92(3), 2004.
+Usage: add `libs/v2x-misc/include` to the include path.
